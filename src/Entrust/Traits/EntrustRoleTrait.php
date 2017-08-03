@@ -1,16 +1,18 @@
 <?php
 
 namespace Ucer\Entrust\Traits;
+
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cache;
 
 trait EntrustRoleTrait
 {
+
     /**
      * Checks if the role has a permission by its name.
      *
-     * @param string|array $name       Permission name or array of permission names.
-     * @param bool         $requireAll All permissions in the array are required.
+     * @param string|array $name Permission name or array of permission names.
+     * @param bool $requireAll All permissions in the array are required.
      *
      * @return bool
      */
@@ -41,15 +43,17 @@ trait EntrustRoleTrait
 
         return false;
     }
+
     //Big block of caching functionality.
     public function cachedPermissions()
     {
         $rolePrimaryKey = $this->primaryKey;
-        $cacheKey = 'entrust_permissions_for_role_'.$this->$rolePrimaryKey;
+        $cacheKey = 'entrust_permissions_for_role_' . $this->$rolePrimaryKey;
         return Cache::tags(Config::get('entrust.permission_role_table'))->remember($cacheKey, Config::get('cache.ttl'), function () {
             return $this->perms()->get();
         });
     }
+
     /**
      * Attach permission to current role.
      *
@@ -69,6 +73,7 @@ trait EntrustRoleTrait
 
         $this->perms()->attach($permission);
     }
+
     /**
      * Attach multiple permissions to current role.
      *
@@ -81,7 +86,9 @@ trait EntrustRoleTrait
         foreach ($permissions as $permission) {
             $this->attachPermission($permission);
         }
-    }    /**
+    }
+
+    /**
      * Detach permission from current role.
      *
      * @param object|array $permission
@@ -120,8 +127,9 @@ trait EntrustRoleTrait
      */
     public function users()
     {
-        return $this->belongsToMany(Config::get('auth.providers.users.model'), Config::get('entrust.role_user_table'),Config::get('entrust.role_foreign_key'),Config::get('entrust.user_foreign_key'));
+        return $this->belongsToMany(Config::get('auth.providers.users.model'), Config::get('entrust.role_user_table'), Config::get('entrust.role_foreign_key'), Config::get('entrust.user_foreign_key'));
     }
+
     /**
      * Many-to-Many relations with the permission model.
      * Named "perms" for backwards compatibility. Also because "perms" is short and sweet.
