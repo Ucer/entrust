@@ -1,6 +1,6 @@
 <?php
 
-namespace Ucer\Entrust;
+namespace Ucer\Entrust\Middlewares;
 
 /**
  * This file is part of Entrust,
